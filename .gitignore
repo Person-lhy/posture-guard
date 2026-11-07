@@ -1,0 +1,19 @@
+# 运行/环境产物
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 打包/构建
+build/
+dist/
+*.egg-info/
+
+# 运行期数据（日报 CSV、周报图等，不入库）
+data/
+reports/
+
+# IDE
+.idea/
+.vscode/
