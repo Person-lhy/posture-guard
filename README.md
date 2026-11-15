@@ -25,6 +25,12 @@
 
 采集/推理（Worker 线程）→ 指标提取 → 滤波分级 → 决策（判定与提醒分离）→ PySide6 托盘交互；数据层独立成环（CSV → 校准 / 日报 / 周报）。
 
+## 演示
+
+![工作原理示意动画](docs/答辩素材/demo.gif)
+
+*合成数据驱动的原理示意：坐姿变差 → 指标越线 → 满 15s 温和提醒一次 → 恢复。实机录屏见 Roadmap。*
+
 ## 快速开始
 
 ```bash
@@ -102,7 +108,7 @@ posture-guard/
 ## Roadmap
 
 - [ ] 本机实测 MediaPipe vs YOLO 对比数据，填入上方实验表（`python benchmark.py && python sync_bench.py`）
-- [ ] 录制演示 GIF / 短视频，补充到 README 与答辩素材
+- [x] 原理示意动画（[demo.gif](docs/答辩素材/demo.gif)，合成数据驱动）；实机录屏 / GIF 待补
 - [ ] 手工标注小样本集，报告 PCK / 角度误差（把"角度一致性"口径升级为"精度"口径）
 - [ ] Web 版每日/每周报告（离线导出 HTML）
 
