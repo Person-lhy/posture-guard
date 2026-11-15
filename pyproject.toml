@@ -1,0 +1,33 @@
+[project]
+name = "posture-guard"
+version = "1.0.0"
+description = "Local-first webcam posture monitor: geometric posture grading, gentle desktop reminders, CSV reports and data-driven threshold tuning"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Person-lhy" }]
+keywords = [
+    "posture",
+    "mediapipe",
+    "computer-vision",
+    "desktop-reminder",
+    "health",
+    "ergonomics",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Win32 (MS Windows)",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+    "Topic :: Utilities",
+]
+
+# 运行依赖见 requirements.txt（opencv/mediapipe/PySide6/matplotlib）
+# 测试零重依赖，CI 只装 pytest 即可全量回归。
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

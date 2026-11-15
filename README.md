@@ -1,8 +1,15 @@
 # 坐姿监测小助手（Posture Guard）
 
+[![CI](https://github.com/Person-lhy/posture-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/Person-lhy/posture-guard/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11-blue.svg)
+![Tests](https://img.shields.io/badge/tests-108%20passed-brightgreen.svg)
+
 > 本地视觉坐姿识别与桌面提醒系统 —— 摄像头实时识别坐姿，桌面气泡温和提醒，数据全程不出本机。
 > 机器人工程本科个人项目：自用工具 / 简历项目 / 毕业设计答辩。
 > 源码：github.com/Person-lhy/posture-guard
+
+*A local-first webcam posture monitor: MediaPipe keypoints → geometric posture grading → gentle desktop reminders, with daily/weekly reports and data-driven threshold tuning. Privacy by design — no frames leave your machine.*
 
 ## 功能
 
@@ -45,7 +52,7 @@ python -m pytest tests/          # 或逐个运行
 python tests/test_geometry.py
 ```
 
-96 个单测覆盖几何计算、指标提取、滤波分级、提醒状态机、存储报告、阈值校准；时间行为用假时钟、姿态用合成关键点，**不依赖摄像头即可回归**。
+108 个单测覆盖几何计算、指标提取、滤波分级、提醒状态机、存储报告、阈值校准、分类器实验；时间行为用假时钟、姿态用合成关键点，**不依赖摄像头与重依赖即可回归**（CI 见 `.github/workflows/ci.yml`）。
 
 ## 实验结果（MediaPipe vs YOLO-Pose）
 
@@ -61,6 +68,7 @@ _尚未实测——运行 `python benchmark.py && python sync_bench.py` 后自�
 
 ```
 posture-guard/
+├── .github/workflows/  # CI：pytest 矩阵（3.10/3.11 × Ubuntu/Windows）
 ├── app.py              # PySide6 托盘主程序（Worker QThread + 信号通信）
 ├── geometry.py         # θ/d/r/φ/s 纯函数角度计算
 ├── metrics.py          # 关键点 → 指标提取
@@ -75,6 +83,9 @@ posture-guard/
 ├── classifier.py       # 学习型分类器实验（纯 Python 逻辑回归）
 ├── config.py           # 全部阈值与提醒参数
 ├── tests/              # 14 个测试文件，108 个单测
+├── pyproject.toml      # 项目元数据 + pytest 配置
+├── CHANGELOG.md        # 版本变更记录
+├── LICENSE             # MIT
 └── docs/
     ├── 细节规格.md      # 坐标系约定、指标定义、参数表
     ├── 答辩素材/        # 架构图、演示脚本、PPT 讲稿、FAQ
@@ -87,6 +98,13 @@ posture-guard/
 2. **判定与提醒分离**：posture_rules 只回答"现在好不好"，reminder_engine 决定"何时发声"，两模块各自可独立测试
 3. **阈值从数据标定**：锚定好坏姿势分布边界（P15/P85），分布重叠时**拒绝给建议**——给无区分度阈值等于装了误报制造器
 4. **边界语义**：人离开、追踪丢失、数据缺失时如实报告 unknown，不用旧值续喂、不冻结计时
+
+## Roadmap
+
+- [ ] 本机实测 MediaPipe vs YOLO 对比数据，填入上方实验表（`python benchmark.py && python sync_bench.py`）
+- [ ] 录制演示 GIF / 短视频，补充到 README 与答辩素材
+- [ ] 手工标注小样本集，报告 PCK / 角度误差（把"角度一致性"口径升级为"精度"口径）
+- [ ] Web 版每日/每周报告（离线导出 HTML）
 
 ## 隐私
 
