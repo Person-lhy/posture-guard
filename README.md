@@ -3,7 +3,7 @@
 [![CI](https://github.com/Person-lhy/posture-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/Person-lhy/posture-guard/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11-blue.svg)
-![Tests](https://img.shields.io/badge/tests-108%20passed-brightgreen.svg)
+![Tests](https://img.shields.io/badge/tests-124%20passed-brightgreen.svg)
 
 > 本地视觉坐姿识别与桌面提醒系统 —— 摄像头实时识别坐姿，桌面气泡温和提醒，数据全程不出本机。
 > 机器人工程本科个人项目：自用工具 / 简历项目 / 毕业设计答辩。
@@ -17,7 +17,7 @@
 - **智能提醒**：坏姿势持续 15 秒才弹气泡；300 秒冷却、夜间静默（23:00–08:00）、每日上限 20 次、小睡 30 分钟——宁可漏提醒，不可烦到关软件
 - **久坐提醒**：坐满 45 分钟提示起身，离座自动清零
 - **数据闭环**：每秒指标落盘 CSV → 每日报告（时间线 + 坏姿势 TOP 时段）→ 周报趋势 → 阈值校准（warn≈不良 P15 / recover≈正常 P85，无区分度拒绝给建议）→ 一键写回配置
-- **工程配套**：设置窗口、开机自启（启动文件夹，不碰注册表）、108 个单元测试、MediaPipe vs YOLO 对比实验 harness、学习型分类器实验（纯 Python 逻辑回归）
+- **工程配套**：设置窗口、开机自启（启动文件夹，不碰注册表）、124 个单元测试、MediaPipe vs YOLO 对比实验 harness、精度评测 harness（PCK + 角度误差，需标注）、学习型分类器实验（纯 Python 逻辑回归）
 
 ## 架构
 
@@ -58,7 +58,7 @@ python -m pytest tests/          # 或逐个运行
 python tests/test_geometry.py
 ```
 
-108 个单测覆盖几何计算、指标提取、滤波分级、提醒状态机、存储报告、阈值校准、分类器实验；时间行为用假时钟、姿态用合成关键点，**不依赖摄像头与重依赖即可回归**（CI 见 `.github/workflows/ci.yml`）。
+124 个单测覆盖几何计算、指标提取、滤波分级、提醒状态机、存储报告、阈值校准、分类器与精度评测；时间行为用假时钟、姿态用合成关键点，**不依赖摄像头与重依赖即可回归**（CI 见 `.github/workflows/ci.yml`）。
 
 ## 实验结果（MediaPipe vs YOLO-Pose）
 
@@ -69,6 +69,8 @@ _尚未实测——运行 `python benchmark.py && python sync_bench.py` 后自�
 <!-- BENCH:END -->
 
 学习型分类器实验（`python classifier.py --demo`）：以规则分级为参照标签，4 项指标训练纯 Python 逻辑回归，留出集报告准确率/F1 与规则一致率——口径是**规则蒸馏**，学习边界与规则边界的差异是观察对象。
+
+精度评测（`python precision_eval.py`，需人工标注）：PCK@0.1（关键点定位精度，肩宽归一化）+ θ/d/s 任务指标误差（MAE/RMSE/P95）；标注格式与步骤见 [docs/标注规范.md](docs/标注规范.md)。与 benchmark 的"一致性"口径互补——**稳定性 ≠ 精度**。
 
 ## 项目结构
 
@@ -85,16 +87,18 @@ posture-guard/
 ├── report.py / weekly.py / autotune.py   # 日报 / 周报 / 阈值校准
 ├── settings.py         # 配置持久化 + 开机自启
 ├── benchmark.py        # MediaPipe vs YOLO 对比实验 harness
+├── precision_eval.py   # 精度评测 harness（PCK + 任务指标误差，需标注真值）
 ├── sync_bench.py       # benchmark 结果同步进 README 表格
 ├── classifier.py       # 学习型分类器实验（纯 Python 逻辑回归）
 ├── config.py           # 全部阈值与提醒参数
-├── tests/              # 14 个测试文件，108 个单测
+├── tests/              # 15 个测试文件，124 个单测
 ├── pyproject.toml      # 项目元数据 + pytest 配置
 ├── CHANGELOG.md        # 版本变更记录
 ├── LICENSE             # MIT
 └── docs/
     ├── 细节规格.md      # 坐标系约定、指标定义、参数表
     ├── 校准操作卡.md    # 阈值校准步骤（合成演示链路 + 真数据流程）
+    ├── 标注规范.md      # 精度评测的标注格式与步骤
     ├── 答辩素材/        # 架构图、演示动画、演示脚本、PPT 讲稿、FAQ
     └── 简历素材/        # 简历项目经历条目
 ```
@@ -110,7 +114,7 @@ posture-guard/
 
 - [ ] 本机实测 MediaPipe vs YOLO 对比数据，填入上方实验表（`python benchmark.py && python sync_bench.py`）
 - [x] 原理示意动画（[demo.gif](docs/答辩素材/demo.gif)，合成数据驱动）；实机录屏 / GIF 待补
-- [ ] 手工标注小样本集，报告 PCK / 角度误差（把"角度一致性"口径升级为"精度"口径）
+- [x] 精度评测 harness（`precision_eval.py`：PCK + θ/d/s 误差）；待按[标注规范](docs/标注规范.md)标 50–100 帧出实测数字
 - [ ] Web 版每日/每周报告（离线导出 HTML）
 
 ## 隐私
