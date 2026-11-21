@@ -7,7 +7,7 @@
 
 > 本地视觉坐姿识别与桌面提醒系统 —— 摄像头实时识别坐姿，桌面气泡温和提醒，数据全程不出本机。
 > 机器人工程本科个人项目：自用工具 / 简历项目 / 毕业设计答辩。
-> 源码：github.com/Person-lhy/posture-guard
+> 源码：[github.com/Person-lhy/posture-guard](https://github.com/Person-lhy/posture-guard)
 
 *A local-first webcam posture monitor: MediaPipe keypoints → geometric posture grading → gentle desktop reminders, with daily/weekly reports and data-driven threshold tuning. Privacy by design — no frames leave your machine.*
 

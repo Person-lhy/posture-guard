@@ -2,6 +2,18 @@
 
 本项目遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 风格；版本号语义化（SemVer）。
 
+## [Unreleased]
+
+### Added
+
+- 原理示意动画 `docs/答辩素材/demo.gif`（`make_demo_gif.py` 可复现生成）
+- 阈值校准操作卡 `docs/校准操作卡.md`
+- 精度评测 harness `precision_eval.py`（PCK + θ/d/s 任务误差）+ 标注规范 `docs/标注规范.md`
+
+### Changed
+
+- 单测 108 → 124（新增 precision_eval 16 测）
+
 ## [1.0.0] - 2026-11-15
 
 首个完整版本：从采集到提醒、从日报到校准的本地闭环。
